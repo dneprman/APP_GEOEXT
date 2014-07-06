@@ -1,0 +1,54 @@
+.add {
+    background-image: url('../images/add.png') !important;
+}
+.cancel{
+    background-image: url('../images/cancel.png') !important;
+}
+.delete{
+    background-image: url('../images/delete.png') !important;
+}
+.save{
+    background-image: url('../images/disk.png') !important;
+}
+.edit{
+    background-image: url('../images/pencil.png') !important;
+}
+.refresh{
+    background-image: url('../images/refresh.png') !important;
+}
+.ag-header {
+    background-color: #252F49;
+    border-bottom: 1px solid #16191D;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    text-shadow: 0 1px 0 #16191D;
+
+}
+
+.ag-footer {
+    background-color: #252F49;
+    border-bottom: 1px solid #16191D;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    text-shadow: 0 1px 0 #16191D;
+
+}
+
+.ag-helpwindow {
+    background-color: #FFFFFF;
+    padding: 5px;
+}
+
+.ag-helpwindow div.cascade {
+    padding: 0 0 0 5px;
+}
+
+.ag-helpwindow h2 {
+    margin: 2px 0 0 0;
+}
