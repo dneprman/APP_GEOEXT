@@ -52,3 +52,11 @@
 .ag-helpwindow h2 {
     margin: 2px 0 0 0;
 }
+
+.x-grid-row .x-grid-cell-inner {
+    white-space: normal;
+}
+.x-grid-row-over .x-grid-cell-inner {
+    font-weight: normal;
+    white-space: normal;
+}

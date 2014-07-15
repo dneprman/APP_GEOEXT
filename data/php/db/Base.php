@@ -20,7 +20,7 @@ abstract class Base {
 
     $this->config['adapter'] = "pgsql";
     $this->config['hostname'] = "192.168.72.135";
-    $this->config['dbname'] = "agro";
+    $this->config['dbname'] = "agro_new";
     $this->config['user'] = "postgres";
     $this->config['password'] = "postgres";
 
@@ -93,7 +93,7 @@ abstract class Base {
 
         //$sql = "SELECT * FROM " . $this->getTable();
         //$sql = "SELECT * FROM " . $this->getTable() . " ORDER BY :order";
-        $sql = "SELECT * FROM " . $this->getTable() . " ORDER BY name ASC"; //Сортировка прописана жестко
+        $sql = "SELECT * FROM " . $this->getTable() . " ORDER BY cadnum ASC"; //Сортировка прописана жестко
 
         if($start !== null && $start !== '' && $limit !== null && $limit !== ''){
             //$sql .= " LIMIT " . $start . " , " . $limit; //MSSQL

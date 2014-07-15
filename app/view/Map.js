@@ -80,6 +80,7 @@ Ext.define('AG.view.Map', {
             }))
         );
 
+
         Ext.apply(me, {
             map: map,
             dockedItems: [{
@@ -96,3 +97,7 @@ Ext.define('AG.view.Map', {
         me.callParent(arguments);
     }
 });
+
+Ext.define('AG.view.Map', {
+    extend: 'Ext.panel.Panel'
+})

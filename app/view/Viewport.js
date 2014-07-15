@@ -15,6 +15,7 @@ Ext.define('AG.view.Viewport', {
         'AG.view.Legend',
         'AG.view.Layer',
         'AG.view.Filter',
+        'AG.view.Info',
         'AG.view.user.List',
         'AG.view.user.Edit',
         'AG.view.summit.Chart',
@@ -59,7 +60,7 @@ Ext.define('AG.view.Viewport', {
                 }, {
                     xtype: 'panel',
                     region: 'east',
-                    width: 350,
+                    width: 550,
                     collapsible: true,
                     border: true,
                     id    : 'infopanel',
@@ -71,7 +72,8 @@ Ext.define('AG.view.Viewport', {
                             Ext.create('AG.view.Filter'),
                             {xtype: 'splitter'},
                             //Ext.create('AG.view.Filter')
-                            Ext.create('AG.view.user.List')
+                            //Ext.create('AG.view.user.List')
+                            Ext.create('AG.view.Info')
                         ]
                 }]
             }]

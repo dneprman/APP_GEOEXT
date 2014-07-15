@@ -5,7 +5,7 @@ Ext.require('Ext.window.MessageBox');
 
 Ext.define('AG.controller.Users', {
     extend: 'Ext.app.Controller',
-    stores: ['Users'],
+    stores: ['Users','Summits'],
     models: ['User'],
 
     views: [
@@ -19,8 +19,16 @@ Ext.define('AG.controller.Users', {
             selector: 'userlist'
         },
         {
-            ref: 'userEdit',
+            ref: 'useredit',
             selector: 'useredit'
+        },
+        {
+            ref: 'filter',
+            selector: 'ag_filterpanel'
+        },
+        {
+            ref: 'summitgrid',
+            selector: 'summitgrid'
         }],
 
     init: function() {
@@ -47,8 +55,45 @@ Ext.define('AG.controller.Users', {
 
             'useredit button[action=save]': {
                 click: this.save
+            },
+
+            'ag_filterpanel button[action=filter]': {
+                click: this.filter
+            },
+
+            'ag_filterpanel button[action=filter_cancel]': {
+                click: this.filter_cancel
             }
         });
+    },
+
+    filter_cancel: function() {
+        var store = this.getUserlist().store;
+        //var store = this.getSummitgrid().store;
+        store.clearFilter(true);
+        //this.getUserlist().store.sync();
+        this.getUserlist().store.load();
+    },
+
+    filter: function() {
+
+        var filter_name = Ext.getCmp('filter_name').getValue();
+        var store = this.getUserlist().store;
+        //var store = this.getSummitgrid().store;
+        store.clearFilter(true);
+        store.filter('name', filter_name);
+        this.getUserlist().store.sync();
+
+        /*
+            Ext.Msg.show({
+                title: 'Attention',
+                msg: 'Delete selected feature?',
+                buttons: Ext.Msg.YESNO,
+                icon : Ext.MessageBox.WARNING,
+                scope: this,
+                width: 450
+            });
+        */
     },
 
     refresh: function(){

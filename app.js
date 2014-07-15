@@ -29,7 +29,8 @@ Ext.application({
     appFolder: 'app',
 
     controllers: [
-        'Users',
+        //'Users',
+        'Info',
         'Map'
     ],
 
