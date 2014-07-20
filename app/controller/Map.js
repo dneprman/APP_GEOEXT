@@ -2,12 +2,12 @@ Ext.define('AG.controller.Map', {
     extend: 'Ext.app.Controller',
 
     models: ['Summit'],
-    stores: ['Summits','Legendlayer'],
+    stores: ['Summits','Legends'],
 
     refs: [
         {ref: 'summitChart', selector: 'summitchart'},
-        {ref: 'summitGrid', selector: 'summitgrid'}/*,
-         {ref: 'ag_legendpanel', selector: 'ag_legendpanel'}*/
+        {ref: 'summitGrid', selector: 'summitgrid'}
+        //{ref: 'ag_legendpanel', selector: 'ag_legendpanel'}
     ],
 
     init: function() {
@@ -16,6 +16,11 @@ Ext.define('AG.controller.Map', {
         me.getSummitsStore().on({
             scope: me,
             load : me.onSummitsStoreLoad
+        });
+
+        me.getLegendsStore().on({
+            scope: me,
+            load : me.onLegendsStoreLoad
         });
 
         this.control({

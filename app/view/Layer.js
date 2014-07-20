@@ -6,7 +6,7 @@
 Ext.define('AG.view.Layer', {
     extend: 'GeoExt.tree.Panel',
     alias : 'widget.ag_layerpanel',
-    store: 'Layers',
+
     requires: [
         'GeoExt.tree.Panel',
         'Ext.tree.plugin.TreeViewDragDrop',
@@ -14,20 +14,23 @@ Ext.define('AG.view.Layer', {
         'GeoExt.tree.Column'
     ],
 
-    title: 'Layer panel',
-    autoScroll: false,
-    flex:1,
-    viewConfig: {
-        plugins: [{
-            ptype: 'treeviewdragdrop',
-            appendOnly: false
-        }]
-    },
-    rootVisible: false,
-    lines: false
-/*
     initComponent: function(){
-        this.callParent();
+         Ext.apply(this, {
+             title: 'Layer panel',
+             store: 'Layers',
+             autoScroll: false,
+             flex:1,
+             viewConfig: {
+                 plugins: [{
+                     ptype: 'treeviewdragdrop',
+                     appendOnly: false
+                 }]
+             },
+             rootVisible: false,
+             lines: false
+         });
+
+         this.callParent();
     }
-*/
+
 });

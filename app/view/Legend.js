@@ -7,7 +7,7 @@ Ext.define('AG.view.Legend', {
     // Ext.panel.Panel-specific options:
     extend: 'GeoExt.panel.Legend',
     alias : 'widget.ag_legendpanel',
-    store: 'Legendlayer',
+    store: 'Legends',
     requires: [
         'GeoExt.container.WmsLegend',
         'GeoExt.container.UrlLegend',
@@ -17,13 +17,12 @@ Ext.define('AG.view.Legend', {
 
 
     onRender: function(){
-        //this.layerStore
+        //this.store.load();
         this.callParent(arguments);
     },
 
     initComponent: function() {
         Ext.apply(this, {
-            //layersStore: this.store,
             title: 'Legend panel',
             border: 'true',
             flex:1
