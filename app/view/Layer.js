@@ -1,19 +1,33 @@
 /**
- * The GeoExt.panel.Map used in the application.  Useful to define map options
- * and stuff.
+ * The GeoExt.tree.Panel used in the application.
  * @extends GeoExt.panel.Map
  */
+
 Ext.define('AG.view.Layer', {
-    // Ext.panel.Panel-specific options:
-    extend: 'Ext.panel.Panel',
+    extend: 'GeoExt.tree.Panel',
     alias : 'widget.ag_layerpanel',
+    store: 'Layers',
+    requires: [
+        'GeoExt.tree.Panel',
+        'Ext.tree.plugin.TreeViewDragDrop',
+        'GeoExt.tree.View',
+        'GeoExt.tree.Column'
+    ],
+
     title: 'Layer panel',
-    border: 'true',
+    autoScroll: false,
     flex:1,
-
-    initComponent: function() {
-        var me = this
-
-        me.callParent(arguments);
+    viewConfig: {
+        plugins: [{
+            ptype: 'treeviewdragdrop',
+            appendOnly: false
+        }]
+    },
+    rootVisible: false,
+    lines: false
+/*
+    initComponent: function(){
+        this.callParent();
     }
+*/
 });

@@ -5,15 +5,31 @@
  */
 Ext.define('AG.view.Legend', {
     // Ext.panel.Panel-specific options:
-    extend: 'Ext.panel.Panel',
+    extend: 'GeoExt.panel.Legend',
     alias : 'widget.ag_legendpanel',
-    title: 'Legend panel',
-    border: 'true',
-    flex:1,
+    store: 'Legendlayer',
+    requires: [
+        'GeoExt.container.WmsLegend',
+        'GeoExt.container.UrlLegend',
+        'GeoExt.container.VectorLegend',
+        'GeoExt.panel.Legend'
+    ],
+
+
+    onRender: function(){
+        //this.layerStore
+        this.callParent(arguments);
+    },
 
     initComponent: function() {
-        var me = this
+        Ext.apply(this, {
+            //layersStore: this.store,
+            title: 'Legend panel',
+            border: 'true',
+            flex:1
+        });
 
-        me.callParent(arguments);
+        this.callParent(arguments);
     }
+
 });

@@ -5,9 +5,9 @@ Ext.Loader.setConfig({
     enabled: true,
     disableCaching: false,
     paths: {
-        GeoExt: "http://192.168.72.132:82/lib/geoext2/src/GeoExt",
+        GeoExt: "/lib/geoext2/src/GeoExt",
         // for dev use
-        Ext: "http://192.168.72.132:82/lib/ext-4.2.1/src"
+        Ext: "/lib/ext-4.2.1/src"
         // for build purpose
         //Ext: "ext-4.2.1.883/src"
     }
@@ -27,6 +27,16 @@ Ext.require([
 Ext.application({
     name: 'AG',
     appFolder: 'app',
+
+
+    extend: 'Ext.app.Application',
+
+    requires: [
+        'GeoExt.tree.LayerContainer',
+        'GeoExt.tree.OverlayLayerContainer',
+        'GeoExt.tree.BaseLayerContainer',
+        'GeoExt.data.LayerTreeModel'
+    ],
 
     controllers: [
         //'Users',

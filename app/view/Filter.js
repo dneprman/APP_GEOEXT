@@ -7,76 +7,110 @@ Ext.define('AG.view.Filter', {
     // Ext.panel.Panel-specific options:
     extend: 'Ext.panel.Panel',
     alias : 'widget.ag_filterpanel',
-    title   : 'FieldContainers',
+    title   : 'Filter',
     autoHeight: true,
-    width   : 600,
     bodyPadding: 10,
-    fixed: 1,
     defaults: {
-        anchor: '100%',
-        labelWidth: 100
+        anchor: '100%'
+        //labelWidth: 50
     },
-    items   : [
-        {
-            xtype     : 'textfield',
-            name      : 'filter_cadnum',
-            id        : 'filter_cadnum',
-            fieldLabel: 'Select cadnum',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
+
+    items : [{
+            xtype: 'container',
+            combineErrors: true,
+            msgTarget : 'side',
+            layout: 'hbox',
+            items: [
+                {
+                    //the width of this field in the HBox layout is set directly
+                    //the other 2 items are given flex: 1, so will share the rest of the space
+                    flex: 1,
+                    labelWidth: 40,
+                    xtype:          'combo',
+                    mode:           'local',
+                    //value:          'mrs',
+                    triggerAction:  'all',
+                    forceSelection: true,
+                    editable:       false,
+                    fieldLabel:     'Select',
+                    name:           'select',
+                    id:             'filter_select',
+                    displayField:   'name',
+                    valueField:     'value',
+                    queryMode: 'local',
+                    store:          Ext.create('Ext.data.Store', {
+                        fields : ['name', 'value'],
+                        data   : [
+                            {name : 'parcel',   value: 'parcel'},
+                            {name : 'person',  value: 'person'},
+                            {name : 'document', value: 'document'}
+                        ]
+                    })
+                },
+                {
+                    xtype     : 'textfield',
+                    margin: '0 0 0 10',
+                    name      : 'filter_name',
+                    id        : 'filter_name',
+                    fieldLabel: 'Find',
+                    labelWidth: 30,
+                    flex: 2
+                }
+            ]
         },{
-            xtype     : 'textfield',
-            name      : 'filter_name',
-            id        : 'filter_name',
-            fieldLabel: 'Select name',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
-        },{
-            xtype     : 'datefield',
-            name      : 'begin_to',
-            id        : 'begin_to',
-            fieldLabel: 'Orenda begin to',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
-        },{
-            xtype     : 'datefield',
-            name      : 'begin_after',
-            id        : 'begin_after',
-            fieldLabel: 'Orenda begin after',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
-        },{
-            xtype     : 'datefield',
-            name      : 'end_to',
-            id        : 'end_to',
-            fieldLabel: 'Orenda end to',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
-        },{
-            xtype     : 'datefield',
-            name      : 'end_after',
-            id        : 'end_after',
-            fieldLabel: 'Orenda end after',
-            //vtype: 'email',
-            msgTarget: 'side',
-            allowBlank: false
-        }],
+        xtype: 'container',
+        combineErrors: true,
+        msgTarget : 'side',
+        layout: 'hbox',
+        margin: '10 0 0 0',
+        flex :1,
+        items: [
+            {
+                xtype: 'radiogroup',
+                fieldLabel: 'Lease end',
+                labelWidth: 60,
+                flex :3,
+                items: [
+                    {boxLabel: 'to', name: 'rb-auto', inputValue: 1},
+                    {boxLabel: 'after', name: 'rb-auto', inputValue: 2}
+                ]
+            },{
+                xtype     : 'datefield',
+                name      : 'date_to',
+                id        : 'date_to',
+                fieldLabel: 'Data',
+                format:'Y-m-d',
+                labelWidth: 30,
+                flex: 2
+            },{
+                xtype: 'checkbox',
+                fieldLabel: 'Load all',
+                margin: '0 0 0 10',
+                labelWidth: 50,
+                boxLabel: '',
+                name: 'load_all',
+                inputValue: 'load_all',
+                flex: 1
+            }
+        ]
+    }],
+
     buttons : [
-    {
-        text: 'Set',
-        action: 'filter',
-        iconCls: 'save'
-    },
-    {
-        text: 'Cancel',
-        action: 'filter_cancel',
-        iconCls: 'cancel'
-    }
+        {
+            text: 'Set',
+            action: 'filter',
+            iconCls: 'save'
+        },
+        {
+            text: 'Cancel',
+            action: 'filter_cancel',
+            iconCls: 'cancel'
+        }/*,
+        {
+            text: 'Clean',
+            action: 'filter_clean'
+            //iconCls: 'cancel'
+        }*/
     ],
 
     initComponent: function() {

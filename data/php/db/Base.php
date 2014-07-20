@@ -85,20 +85,50 @@ abstract class Base {
         //$dir = $_POST['dir']? $_POST['dir'] : 'ASC';
         $sort = $_POST['sort'];
         $dir = $_POST['dir'];
+
+        $filter = json_decode($_POST['filter']);
+
         $order = $sort . ' ' . $dir;
 
-        //echo "sort = " . $sort. " dir = " . $dir. " order = ". $order . "  ";
+        //echo ($filter[0]->value);
 
         $db = $this->getDb();
 
-        //$sql = "SELECT * FROM " . $this->getTable();
+        $sql = "SELECT * FROM " . $this->getTable();
         //$sql = "SELECT * FROM " . $this->getTable() . " ORDER BY :order";
-        $sql = "SELECT * FROM " . $this->getTable() . " ORDER BY cadnum ASC"; //Сортировка прописана жестко
+        //$sql = "SELECT * FROM " . $this->getTable() . " ORDER BY cadnum ASC"; //Сортировка прописана жестко
+
+        if($filter[0]->property !== null && $filter[0]->value !== null){
+            switch($filter[0]->property) {
+                case "parsel": {
+                        $sql .= " WHERE cadnum LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR area_size::text LIKE '%" . $filter[0]->value . "%'";
+                    break;
+                }
+                case "person": {
+                        $sql .= " WHERE last_name LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR first_name LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR middle_name LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR identification_code::text LIKE '%" . $filter[0]->value . "%'";
+                    break;
+                }
+                case "document": {
+                        $sql .= " WHERE doc_number LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR doc_series LIKE '%" . $filter[0]->value . "%'";
+                        /*$sql .= " OR onm_reg_date LIKE '%" . $filter[0]->value . "%'";
+                        $sql .= " OR onm_end_date LIKE '%" . $filter[0]->value . "%'";*/
+                    break;
+                }
+            }
+            //$sql .= " WHERE " . $filter[0]->property . " LIKE '%" . $filter[0]->value . "%'";
+        }
 
         if($start !== null && $start !== '' && $limit !== null && $limit !== ''){
             //$sql .= " LIMIT " . $start . " , " . $limit; //MSSQL
             $sql .= " LIMIT " . $limit . " OFFSET " . $start; //PGSQL
         }
+
+        //echo $sql;
 
         $stm = $db->prepare($sql);
         //$stm->bindValue(":order", $order);
@@ -112,6 +142,7 @@ abstract class Base {
             "success" => true,
             "total" => $total['total']
         ));
+
     }
 
     public function delete() {

@@ -1,16 +1,13 @@
-/**
- * Map controller
- * Used to manage map layers and showing their related views
- */
 Ext.define('AG.controller.Map', {
     extend: 'Ext.app.Controller',
 
     models: ['Summit'],
-    stores: ['Summits'],
+    stores: ['Summits','Legendlayer'],
 
     refs: [
         {ref: 'summitChart', selector: 'summitchart'},
-        {ref: 'summitGrid', selector: 'summitgrid'}
+        {ref: 'summitGrid', selector: 'summitgrid'}/*,
+         {ref: 'ag_legendpanel', selector: 'ag_legendpanel'}*/
     ],
 
     init: function() {
@@ -27,11 +24,19 @@ Ext.define('AG.controller.Map', {
             }
         }, this);
     },
+    /*
+     onLegendPanelBeforeRender: function(mapPanel) {
 
+     },
+     */
     onMapPanelBeforeRender: function(mapPanel, options) {
         var me = this;
 
+        var geoserver_patch = "http://212.26.131.154:85";
+        var kadastr_patch = "http://212.26.144.110";
+
         var layers = [];
+
 
         // OpenLayers object creating
         var wms = new OpenLayers.Layer.WMS(
@@ -47,45 +52,144 @@ Ext.define('AG.controller.Map', {
         );
         layers.push(wms);
 
+
+        // OpenLayers object creating
+        var wmsLayer_kadastr = new OpenLayers.Layer.WMS(
+            "Land kadastr", kadastr_patch+"/geowebcache/service/wms?tiled=true", {
+                LAYERS:                   'kadastr',
+                STYLES:                   '',
+                format:                   'image/png',
+                tiled:                     true,
+                transparent:              'true'
+            },{
+                buffer:                    0,
+                displayOutsideMaxExtent:   true,
+                isBaseLayer:               false,
+                visibility:				   false,
+                yx:                      {'EPSG:900913':false }
+            });
+        layers.push(wmsLayer_kadastr);
+
+        // config layer PZF (WMS layer)
+        var wms_parcel = new OpenLayers.Layer.WMS("Parcel",
+            geoserver_patch+"/agro/geoserver/dzk/wms", {
+                layers: "parcel_orenda",
+                transparent: true,
+                format: "image/png",
+                tiled: true
+            },{
+                buffer: 0,
+                displayOutsideMaxExtent: true,
+                isBaseLayer: false,
+                visibility: true,
+                yx : {"EPSG:900913" : false}
+            }
+        );
+        layers.push(wms_parcel);
+
+        // config layer PZF (WMS layer)
+        var wms_fields = new OpenLayers.Layer.WMS("Fields",
+            geoserver_patch+"/agro/geoserver/dzk/wms", {
+                layers: "fields",
+                transparent: true,
+                format: "image/png",
+                tiled: true
+            },{
+                buffer: 0,
+                displayOutsideMaxExtent: true,
+                isBaseLayer: false,
+                visibility: false,
+                yx : {"EPSG:900913" : false}
+            }
+        );
+        layers.push(wms_fields);
+
+        var tms_orto = new OpenLayers.Layer.TMS( "Orto M 1:10000", "",
+            {   // url: '', serviceVersion: '.', layername: '.',
+                type: 'jpg', getURL: me.overlay_getTileURL, visibility: true, isBaseLayer: true
+            }
+        );
+        layers.push(tms_orto);
+
+        // config layer TMS Map_10000 (from publi kadastr portal)
+        var tms_map = new OpenLayers.Layer.TMS( "Map M 1:100000", "",
+            {   // url: '', serviceVersion: '.', layername: '.',
+                type: 'jpg', getURL: me.overlay_getTileURL, visibility: false, isBaseLayer: true
+            });
+        layers.push(tms_map);
+
         // create vector layer
         var context = {
             getColor: function(feature) {
-                if (feature.attributes.elevation < 2000) {
-                    return 'green';
-                }
-                if (feature.attributes.elevation < 2300) {
-                    return 'orange';
-                }
-                return 'red';
+                /*if (feature.attributes.elevation < 2000) {
+                 return 'green';
+                 }
+                 if (feature.attributes.elevation < 2300) {
+                 return 'orange';
+                 }*/
+                return 'blue';
             }
         };
+
         var template = {
             cursor: "pointer",
-            fillOpacity: 0.5,
+            fillOpacity: 0.65,
             fillColor: "${getColor}",
-            pointRadius: 5,
+            pointRadius: 7.5,
             strokeWidth: 1,
             strokeOpacity: 1,
             strokeColor: "${getColor}",
             graphicName: "triangle"
         };
+
         var style = new OpenLayers.Style(template, {context: context});
-        var vecLayer = new OpenLayers.Layer.Vector("vector", {
+        var selectStyle = new OpenLayers.Style({'fillColor': 'yellow','strokeColor': 'red'});
+        /*
+         var vecLayer = new OpenLayers.Layer.Vector("vector", {
+         styleMap: new OpenLayers.StyleMap({
+         'default': style
+         }),
+         protocol: new OpenLayers.Protocol.HTTP({
+         url: "../../data/summits.json",
+         format: new OpenLayers.Format.GeoJSON()
+         }),
+         strategies: [new OpenLayers.Strategy.Fixed()]
+         });
+         layers.push(vecLayer);
+         */
+
+        var vecLayer = new OpenLayers.Layer.Vector("Filter", {
             styleMap: new OpenLayers.StyleMap({
-                'default': style
+                'default': style,
+                'select': selectStyle
             }),
-            protocol: new OpenLayers.Protocol.HTTP({
-                url: "../../data/summits.json",
-                format: new OpenLayers.Format.GeoJSON()
-            }),
-            strategies: [new OpenLayers.Strategy.Fixed()]
+            projection: "EPSG:900913"
         });
         layers.push(vecLayer);
-
         // manually bind store to layer
+
         me.getSummitsStore().bind(vecLayer);
 
         mapPanel.map.addLayers(layers);
+
+        //me.getLayerlegendStore().bind(mapPanel.map);
+        /*
+         var lstore = new GeoExt.data.LayerStore({
+         map: map,
+         layers: layers
+         });
+         */
+        /*
+         me.getLayerlegendStore.layerStore = Ext.create('GeoExt.data.LayerStore', {
+         map: mapPanel.map,
+         layers: layers
+         });
+
+         me.getLayerlegendStore().bind(mapPanel.map);
+         */
+        /*
+         me.getLayerStore().bind(mapPanel.map);
+         */
 
         // some more controls
         mapPanel.map.addControls([new OpenLayers.Control.DragFeature(vecLayer, {
@@ -114,6 +218,34 @@ Ext.define('AG.controller.Map', {
         var dataExtent = store.layer.getDataExtent();
         if (dataExtent) {
             store.layer.map.zoomToExtent(dataExtent);
+        }
+    },
+
+    overlay_getTileURL: function(bounds) {
+        var mapBounds = new OpenLayers.Bounds(2216505,5459622,4753408,6985696);
+        var mapMinZoom = 4;
+        var mapMaxZoom = 22
+
+        var res = this.map.getResolution();
+        var x = Math.round((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
+        var y = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * this.tileSize.h)); //так работало
+        var z = this.map.getZoom();
+        if (this.map.baseLayer.name == 'Virtual Earth Roads' || this.map.baseLayer.name == 'Virtual Earth Aerial' || this.map.baseLayer.name == 'Virtual Earth Hybrid') {
+            z = z + 1;
+        }
+
+        if (mapBounds.intersectsBounds(bounds) && z >= mapMinZoom && z <= mapMaxZoom ) {
+            //console.log( this.url + z + "/" + x + "/" + y + "." + this.type);
+            //alert (this.name);
+            if (this.map.layers[4].visibility==true) {
+                return "http://212.26.144.110/tile2/orto_10000/" + z + "/" + x + "/" + y + "." + this.type
+            };
+            if (this.map.layers[5].visibility==true) {
+                return "http://212.26.144.110/tile2/map_100000/" + z + "/" + x + "/" + y + "." + this.type
+            };
+        } else {
+            //alert;
+            return "/images/none.png";
         }
     }
 });

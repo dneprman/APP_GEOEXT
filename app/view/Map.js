@@ -17,15 +17,29 @@ Ext.define('AG.view.Map', {
     //region: 'center',
     //width: 600,
     // GeoExt.panel.Map-specific options :
-    center: '5.7,45.5',
-    zoom: 6,
+    //center: '5.7,45.5',
+    //zoom: 6,
+    center: [3189500,6374700],
+    zoom: 13,
 
     initComponent: function() {
         var me = this,
             items = [],
             ctrl;
 
-        var map = new OpenLayers.Map();
+        var options = {
+            projection: new OpenLayers.Projection("EPSG:900913"),
+            //displayProjection: new OpenLayers.Projection("EPSG:900913"),
+            units: "m",
+            numZoomLevels: 18,
+            minZoomLevels: 5,
+            maxZoomLevels: 20,
+            maxResolution: 156543.0339,
+            maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508)
+        };
+
+        //var map = new OpenLayers.Map();
+        map = new OpenLayers.Map('map', options);
 
         // ZoomToMaxExtent control, a "button" control
         items.push(Ext.create('Ext.button.Button', Ext.create('GeoExt.Action', {
@@ -80,7 +94,6 @@ Ext.define('AG.view.Map', {
             }))
         );
 
-
         Ext.apply(me, {
             map: map,
             dockedItems: [{
@@ -97,7 +110,3 @@ Ext.define('AG.view.Map', {
         me.callParent(arguments);
     }
 });
-
-Ext.define('AG.view.Map', {
-    extend: 'Ext.panel.Panel'
-})

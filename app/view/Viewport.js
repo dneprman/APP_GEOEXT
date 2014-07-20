@@ -19,7 +19,13 @@ Ext.define('AG.view.Viewport', {
         'AG.view.user.List',
         'AG.view.user.Edit',
         'AG.view.summit.Chart',
-        'AG.view.summit.Grid'
+        'AG.view.summit.Grid'/*,
+        'Ext.container.Viewport',
+        'GeoExt.panel.Map',
+        'GeoExt.container.WmsLegend',
+        'GeoExt.container.UrlLegend',
+        'GeoExt.container.VectorLegend',
+        'GeoExt.panel.Legend'*/
     ],
 
     initComponent: function() {
@@ -38,8 +44,8 @@ Ext.define('AG.view.Viewport', {
                 {
                     xtype: 'panel',
                     region: 'west',
-                    width: 350,
-                    collapsed: true,
+                    width: 225,
+                    collapsed: false,
                     collapsible: true,
                     border: true,
                     id    : 'layerlegend',
@@ -48,11 +54,19 @@ Ext.define('AG.view.Viewport', {
                         align: 'stretch'
                     },
                     items: [
-                        //Ext.create('AG.view.Layer'),
-                        Ext.create('AG.view.summit.Chart'),
+                        Ext.create('AG.view.Layer'),
                         {xtype: 'splitter'},
-                        //Ext.create('AG.view.Legend')
-                        Ext.create('AG.view.summit.Grid')
+                        /*Ext.create('GeoExt.panel.Legend',{
+                            defaults: {
+                                //abelCls: 'mylabel',
+                                style: 'padding:5px'
+                            },
+                            flex: 1,
+                            title: 'Legend panel',
+                            bodyStyle: 'padding:5px',
+                            autoScroll: true
+                    })*/
+                         Ext.create('AG.view.Legend')
                     ]
                 },{
                     xtype: 'ag_mappanel',
@@ -60,7 +74,7 @@ Ext.define('AG.view.Viewport', {
                 }, {
                     xtype: 'panel',
                     region: 'east',
-                    width: 550,
+                    width: 475,
                     collapsible: true,
                     border: true,
                     id    : 'infopanel',
