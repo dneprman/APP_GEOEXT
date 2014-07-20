@@ -31,7 +31,7 @@
     <script src="/lib/OpenLayers-2.13.1/OpenLayers.js"></script>
 
     <!-- Ext and GeoExt files are fetched by the loader.  See in app.js -->
-    <script type="text/javascript" charset="utf-8" src="/lib/ext-4.2.1/ext-debug.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/lib/ext-4.2.1/ext-all.js"></script>
 
     <!-- In order to be able to build app-all.js, you need to have a local
          extjs copy.  If you want to try it, comment the above script tag

@@ -3,6 +3,7 @@
  */
 Ext.define('AG.store.Info', {
     extend: 'Ext.data.Store',
+    //extend: 'GeoExt.data.FeatureStore',
     model: 'AG.model.Info', // Вместо опции fields:
 
     autoLoad: false,

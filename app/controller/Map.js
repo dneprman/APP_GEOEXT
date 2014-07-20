@@ -1,26 +1,20 @@
 Ext.define('AG.controller.Map', {
     extend: 'Ext.app.Controller',
 
-    models: ['Summit'],
-    stores: ['Summits','Legends'],
+    models: ['Feature'],
+    stores: ['Feature','Legends'],
 
     refs: [
-        {ref: 'summitChart', selector: 'summitchart'},
-        {ref: 'summitGrid', selector: 'summitgrid'}
-        //{ref: 'ag_legendpanel', selector: 'ag_legendpanel'}
+        {ref: 'summitFeature', selector: 'summitfeature'},
+        {ref: 'ag_legendpanel', selector: 'ag_legendpanel'}
     ],
 
     init: function() {
         var me = this;
 
-        me.getSummitsStore().on({
+        me.getFeatureStore().on({
             scope: me,
             load : me.onSummitsStoreLoad
-        });
-
-        me.getLegendsStore().on({
-            scope: me,
-            load : me.onLegendsStoreLoad
         });
 
         this.control({
@@ -140,7 +134,7 @@ Ext.define('AG.controller.Map', {
             cursor: "pointer",
             fillOpacity: 0.65,
             fillColor: "${getColor}",
-            pointRadius: 7.5,
+            pointRadius: 3.5,
             strokeWidth: 1,
             strokeOpacity: 1,
             strokeColor: "${getColor}",
@@ -149,20 +143,21 @@ Ext.define('AG.controller.Map', {
 
         var style = new OpenLayers.Style(template, {context: context});
         var selectStyle = new OpenLayers.Style({'fillColor': 'yellow','strokeColor': 'red'});
-        /*
-         var vecLayer = new OpenLayers.Layer.Vector("vector", {
-         styleMap: new OpenLayers.StyleMap({
-         'default': style
-         }),
-         protocol: new OpenLayers.Protocol.HTTP({
-         url: "../../data/summits.json",
-         format: new OpenLayers.Format.GeoJSON()
-         }),
-         strategies: [new OpenLayers.Strategy.Fixed()]
+
+         var vecLayer = new OpenLayers.Layer.Vector("Filter", {
+             styleMap: new OpenLayers.StyleMap({
+                 'default': style,
+                 'select': selectStyle
+             }),
+             protocol: new OpenLayers.Protocol.HTTP({
+                 url: "../../data/feature.json",
+                 format: new OpenLayers.Format.GeoJSON()
+             }),
+             strategies: [new OpenLayers.Strategy.Fixed()]
          });
          layers.push(vecLayer);
-         */
 
+/*
         var vecLayer = new OpenLayers.Layer.Vector("Filter", {
             styleMap: new OpenLayers.StyleMap({
                 'default': style,
@@ -172,8 +167,8 @@ Ext.define('AG.controller.Map', {
         });
         layers.push(vecLayer);
         // manually bind store to layer
-
-        me.getSummitsStore().bind(vecLayer);
+*/
+        me.getFeatureStore().bind(vecLayer);
 
         mapPanel.map.addLayers(layers);
 
@@ -212,7 +207,19 @@ Ext.define('AG.controller.Map', {
 
     onLaunch: function() {
         var me = this;
-
+/*
+        me.getLegendsStore().store({
+            map: map,
+            layers: map.layers
+        });
+*/
+        //me.getLayerlegendStore().bind(map);
+/*
+         var lstore = new GeoExt.data.LayerStore({
+             map: map,
+             layers: map.layers
+             });
+*/
         // for dev purpose
         ctrl = this;
     },

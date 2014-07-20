@@ -5,7 +5,7 @@ Ext.require('Ext.window.MessageBox');
 
 Ext.define('AG.controller.Info', {
     extend: 'Ext.app.Controller',
-    stores: ['Info','Layers'],
+    stores: ['Info','Layers','Feature'],
     models: ['Info'],
 
     views: [

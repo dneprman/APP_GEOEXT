@@ -4,12 +4,20 @@
 Ext.define('AG.view.Info' ,{
     extend: 'Ext.grid.Panel',
     alias: 'widget.infogrid',
+    requires: [
+        'GeoExt.selection.FeatureModel',
+        'GeoExt.grid.column.Symbolizer',
+        'Ext.grid.plugin.CellEditing',
+        'Ext.form.field.Number'
+    ],
     flex: 1,
     //height: 415,
     store: 'Info',
+    //store: 'Feature',
     title: 'All Info',
     //selModel: {mode: 'MULTI'},
     selModel: Ext.create('Ext.selection.CheckboxModel'),
+    //selType: 'featuremodel',
     tbar: [
         {
             text: 'Insert',
@@ -53,10 +61,24 @@ Ext.define('AG.view.Info' ,{
         flex: 2
     }],
 
+/*
+    columns: [
+        {
+            header: '',
+            dataIndex: 'symbolizer',
+            menuDisabled: true,
+            sortable: false,
+            xtype: 'gx_symbolizercolumn',
+            width: 30
+        },
+        {header: 'Cadnum', dataIndex: 'cadnum', flex: 1}
+    ],
+*/
     // Добавляем пагинацию
     dockedItems: [{
         xtype: 'pagingtoolbar',
         store: 'Info',
+        //store: 'Feature',
         dock: 'bottom',
         displayInfo: true
     }],
@@ -64,26 +86,17 @@ Ext.define('AG.view.Info' ,{
     initComponent: function(){
         this.callParent();
         this.getSelectionModel().on('selectionchange', this.onSelectChange, this);
+        //AG.view.Info.selectionModel = this.getSelectionModel();
     },
 
     onRender: function(){
-        //this.store.load();
+        this.store.load();
         this.callParent(arguments);
     },
 
     onSelectChange: function(selModel, selections){
         this.down('#delete').setDisabled(selections.length === 0);
         this.down('#edit').setDisabled(selections.length !== 1);
+
     }
-    /*
-     initComponent: function() {
-
-     this.columns = [
-     {header: 'Name', dataIndex: 'name', flex: 1},
-     {header: 'Email', dataIndex: 'email', flex: 1}
-     ];
-
-     this.callParent(arguments);
-     }
-     */
 });

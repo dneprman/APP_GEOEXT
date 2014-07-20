@@ -17,6 +17,7 @@ Ext.define('AG.view.Legend', {
 
 
     onRender: function(){
+
         //this.store.load();
         this.callParent(arguments);
     },

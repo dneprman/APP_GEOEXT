@@ -66,7 +66,8 @@ Ext.define('AG.view.Viewport', {
                             bodyStyle: 'padding:5px',
                             autoScroll: true
                     })*/
-                         Ext.create('AG.view.Legend')
+                         //Ext.create('AG.view.Legend')
+                         Ext.create('AG.view.summit.Feature')
                     ]
                 },{
                     xtype: 'ag_mappanel',
